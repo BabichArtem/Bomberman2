@@ -11,8 +11,8 @@ public class BoardManager : MonoBehaviour
     public GameObject EnemyPrefab;
 
 
-    public int xSize = 16;
-    public int zSize = 16;
+    public int xSize = 17;
+    public int zSize = 17;
     private int collapsingWallsCount = 10;
 
     private float floorHeight = 0.0f;
@@ -31,7 +31,7 @@ public class BoardManager : MonoBehaviour
         InstatiateFreeCells();
         LayoutObjectAtRandom(CollapsingWallsPrefab,collapsingWallsCount );
         LayoutObjectAtRandom(PlayerPrefab, 1);
-        LayoutObjectAtRandom(EnemyPrefab, 1);
+        LayoutObjectAtRandom(EnemyPrefab, 2);
 
     }
 

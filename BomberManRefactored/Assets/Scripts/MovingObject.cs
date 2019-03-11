@@ -19,6 +19,7 @@ public class MovingObject : MonoBehaviour
         Down,
         Left,
         Right,
+        Idle
     }
 
 
@@ -42,7 +43,7 @@ public class MovingObject : MonoBehaviour
 
     }
 
-    Vector3 GetPosition(GameObject gameObject)
+    public Vector3 GetPosition(GameObject gameObject)
     {
         return gameObject.transform.position;
     }
@@ -60,9 +61,9 @@ public class MovingObject : MonoBehaviour
     private bool CanMove(Vector3 startPosition, Vector3 endPosition)
     {
         bool hit;
-        boxCollider.enabled = false;
+       // boxCollider.enabled = false;
         hit = Physics.Linecast(startPosition, endPosition, blockingLayer);
-        boxCollider.enabled = true;
+        //boxCollider.enabled = true;
         return !hit;
     }
 

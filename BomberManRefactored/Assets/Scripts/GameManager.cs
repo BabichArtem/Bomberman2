@@ -7,7 +7,6 @@ public class GameManager : MonoBehaviour
 
     private BoardManager boardScript;
 
-    private List<Enemy> enemies;
 
     public static bool PlayerMoved = false; 
 
@@ -23,10 +22,5 @@ public class GameManager : MonoBehaviour
         boardScript.SetupScene();
     }
 
-    public void AddEnemyToList(Enemy script)
-    {
-        //Add Enemy to List enemies.
-        enemies.Add(script);
-    }
 
 }

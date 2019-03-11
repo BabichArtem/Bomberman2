@@ -22,15 +22,6 @@ public class Enemy : MovingObject
         MoveEnemy();
     }
 
-
-
-
-    void GetPlayerPosition()
-    {
-        playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
-    }
-
-
     public Side RandomSide()
     {
         Array values = Enum.GetValues(typeof(Side));
@@ -40,12 +31,14 @@ public class Enemy : MovingObject
 
     public void MoveEnemy()
     {
-        if (GameManager.PlayerMoved)
-        {
-            Side randomSide = RandomSide();
-            AttempMove(enemy, randomSide);
-            GameManager.PlayerMoved = false;
-        }
+        //Change path length
+        Side randomSide = RandomSide();
+        AttempMove(enemy, randomSide);
+    }
+
+    void GetPlayerPosition()
+    {
+        playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
     }
 
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5166963246972656947}
   - component: {fileID: 6495741109661369351}
   - component: {fileID: 8142476036868804025}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,9 +103,9 @@ GameObject:
   - component: {fileID: 7774271318268210172}
   - component: {fileID: 6310529676602214799}
   - component: {fileID: 1706309653029914846}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PlayerPrefab
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -137,8 +137,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.8, y: 1.3, z: 0.9}
-  m_Center: {x: 0, y: 0.4, z: 0}
+  m_Size: {x: 0.9, y: 0.9, z: 0.9}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!54 &6310529676602214799
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -170,6 +170,7 @@ MonoBehaviour:
   blockingLayer:
     serializedVersion: 2
     m_Bits: 512
+  bomb: {fileID: 7299975972107017753, guid: b608103821788bf4483c9551238d2a35, type: 3}
 --- !u!1 &8030289679693874367
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,7 +183,7 @@ GameObject:
   - component: {fileID: 4181856774594960662}
   - component: {fileID: 95044099129831745}
   - component: {fileID: 4310144203365858448}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
