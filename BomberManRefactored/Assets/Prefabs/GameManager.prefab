@@ -1,16 +1,26 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1663388707526467635
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1724047871689560}
+  m_IsPrefabParent: 1
+--- !u!1 &1724047871689560
 GameObject:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
   m_Component:
-  - component: {fileID: 4125508414714446541}
-  - component: {fileID: 2524248724959924732}
-  - component: {fileID: 6919713280453628599}
+  - component: {fileID: 4978735828696256}
+  - component: {fileID: 114828991730453896}
+  - component: {fileID: 114654752027041634}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -18,13 +28,12 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4125508414714446541
+--- !u!4 &4978735828696256
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1663388707526467635}
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1724047871689560}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,39 +41,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2524248724959924732
+--- !u!114 &114654752027041634
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1663388707526467635}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bef58c5d5392884b9271e2a789c5972, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6919713280453628599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1663388707526467635}
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1724047871689560}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf3f8f915b298bc40969900e914e9523, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   FloorPrefab: {fileID: 8277996036561077516, guid: 336dec57931660d47946af5ffb52eaa3,
-    type: 3}
+    type: 2}
   StaticWallsPrefab: {fileID: 4487348431179550393, guid: d68c25e96991a7d4a827eaaae23a0d1f,
-    type: 3}
+    type: 2}
   CollapsingWallsPrefab: {fileID: 414685553552854683, guid: c3359899c5bc19c41882fc1c440389f7,
-    type: 3}
+    type: 2}
   PlayerPrefab: {fileID: 5368023646652123161, guid: 0f689a6a64a8fc042b152ba0576f0e77,
-    type: 3}
+    type: 2}
   EnemyPrefab: {fileID: 3467064154768905892, guid: 1dc5fb39bd3de4945914059299b02b15,
-    type: 3}
-  xSize: 16
-  zSize: 16
+    type: 2}
+  xSize: 17
+  zSize: 17
+--- !u!114 &114828991730453896
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1724047871689560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bef58c5d5392884b9271e2a789c5972, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

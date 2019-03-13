@@ -62,6 +62,7 @@ public class MovingObject : MonoBehaviour
     {
         bool hit;
        // boxCollider.enabled = false;
+       
         hit = Physics.Linecast(startPosition, endPosition, blockingLayer);
         //boxCollider.enabled = true;
         return !hit;
@@ -90,16 +91,16 @@ public class MovingObject : MonoBehaviour
         switch (side)
         {
             case Side.Up:
-                vector.x -= 1;
+                vector.z += 1;
                 break;
             case Side.Down:
-                vector.x += 1;
-                break;
-            case Side.Left:
                 vector.z -= 1;
                 break;
+            case Side.Left:
+                vector.x -= 1;
+                break;
             case Side.Right:
-                vector.z += 1;
+                vector.x += 1;
                 break;
             default:
                 break;

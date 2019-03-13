@@ -13,6 +13,9 @@ public class BoardManager : MonoBehaviour
 
     public int xSize = 17;
     public int zSize = 17;
+
+    public static int[,] field;
+
     private int collapsingWallsCount = 10;
 
     private float floorHeight = 0.0f;
@@ -26,12 +29,13 @@ public class BoardManager : MonoBehaviour
 
     public void SetupScene()
     {
+        field = new int[xSize, zSize];
         boardHolder = new GameObject("Board").transform;
         LayoutStaticObjects();
         InstatiateFreeCells();
-        LayoutObjectAtRandom(CollapsingWallsPrefab,collapsingWallsCount );
-        LayoutObjectAtRandom(PlayerPrefab, 1);
-        LayoutObjectAtRandom(EnemyPrefab, 2);
+        LayoutWallAtRandom(CollapsingWallsPrefab, collapsingWallsCount);
+        LayoutPlayer();
+        LayoutEnemy();
 
     }
 
@@ -45,18 +49,16 @@ public class BoardManager : MonoBehaviour
 
                 Vector3 position = new Vector3(x,ObjectsHeight,z);
                 GameObject instance;
-                if (x == 0 || x == xSize - 1 || z == 0 || z == zSize - 1)
+                if ((x == 0 || x == xSize - 1 || z == 0 || z == zSize - 1)||(x % 2 == 0 && z % 2 == 0))
                 {
                    instance = Instantiate(StaticWallsPrefab, position, Quaternion.identity);
-                }
-                else if (x % 2 == 0 && z % 2 == 0)
-                {
-                    instance = Instantiate(StaticWallsPrefab, position, Quaternion.identity);
+                   field[x, z] = 1;
                 }
                 else
                 {
                     position.y = floorHeight;
                     instance = Instantiate(FloorPrefab, position, Quaternion.identity);
+                    field[x, z] = 0;
                 }
                 instance.transform.SetParent(boardHolder);
             }
@@ -87,15 +89,30 @@ public class BoardManager : MonoBehaviour
         return randomPosition;
     }
 
-    void LayoutObjectAtRandom(GameObject gameObject, int count)
+    void LayoutWallAtRandom(GameObject gameObject, int count)
     {
         for (int i = 0; i < count; i++)
         {
             Vector3 position = RandomPosition();
             GameObject instance = Instantiate(gameObject, position, Quaternion.identity);
             instance.transform.SetParent(boardHolder);
+            field[(int)position.x, (int)position.z] = 1;
+
         }
     }
+
+    void LayoutPlayer()
+    {
+        Vector3 position = RandomPosition();
+        Instantiate(PlayerPrefab, position, Quaternion.identity);
+    }
+
+    void LayoutEnemy()
+    {
+        Vector3 position = RandomPosition();
+        Instantiate(EnemyPrefab, position, Quaternion.identity);
+    }
+
 
 
 
