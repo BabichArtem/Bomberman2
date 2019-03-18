@@ -6,22 +6,27 @@ using Random = UnityEngine.Random;
 
 public class Enemy : MovingObject
 {
-
-    private GameObject enemy;
+    private float EnemySpeed = 2.0f;
 
     private List<Vector3> findedPath;
-    private AStar aStar;
 
     void Start()
     {
-        enemy = this.gameObject;
-        boxCollider = GetComponent<BoxCollider>();
-        aStar = new AStar();
+        ObjectSpeed = EnemySpeed;
     }
 
     void Update()
     {
         MoveEnemy();
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.tag=="Player")
+        {
+            Destroy(col.gameObject);
+        }
+        
     }
 
     public Side RandomSide()
@@ -60,10 +65,7 @@ public class Enemy : MovingObject
             {
                 movingSide = Side.Down;
             }
-
-            Debug.Log(movingSide.ToString());
-
-            AttempMove(enemy, movingSide);
+            AttempMove(gameObject, movingSide);
         }
         else
         {
@@ -85,6 +87,6 @@ public class Enemy : MovingObject
     {
         
         findedPath = new List<Vector3>();
-        findedPath = aStar.PointToVector3(BoardManager.field, startPosition, endPosition);
+        findedPath = AStar.CalculatePathVectorList(BoardManager.field, startPosition, endPosition);
     }   
 }

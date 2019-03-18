@@ -11,12 +11,12 @@ public class BoardManager : MonoBehaviour
     public GameObject EnemyPrefab;
 
 
-    public int xSize = 17;
-    public int zSize = 17;
+    [SerializeField] public int xSize = 35;
+    [SerializeField] public int zSize = 35;
 
     public static int[,] field;
 
-    private int collapsingWallsCount = 10;
+    [SerializeField] private int collapsingWallsCount = 50;
 
     private float floorHeight = 0.0f;
     private float ObjectsHeight = 0.4f;
@@ -27,7 +27,7 @@ public class BoardManager : MonoBehaviour
     private List<Vector3> freeCells;
 
 
-    public void SetupScene()
+    public void SetupScene(int level)
     {
         field = new int[xSize, zSize];
         boardHolder = new GameObject("Board").transform;
@@ -35,7 +35,11 @@ public class BoardManager : MonoBehaviour
         InstatiateFreeCells();
         LayoutWallAtRandom(CollapsingWallsPrefab, collapsingWallsCount);
         LayoutPlayer();
-        LayoutEnemy();
+        for (int i = 0; i < level; i++)
+        {
+            LayoutEnemy();
+        }
+        
 
     }
 

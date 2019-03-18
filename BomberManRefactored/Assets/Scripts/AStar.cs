@@ -11,24 +11,18 @@ public struct Point
 
     public Point(int x, int y)
     {
-        this.X = x;
+        this.X = x; 
         this.Y = y;
     }
 
     public static bool operator ==(Point p1, Point p2)
     {
-        if (p1.X == p2.X && p1.Y == p2.Y)
-            return true;
-        else
-            return false;
+        return p1.X == p2.X && p1.Y == p2.Y;
     }
 
     public static bool operator !=(Point p1, Point p2)
     {
-        if (p1.X != p2.X || p1.Y != p2.Y)
-            return true;
-        else
-            return false;
+        return p1.X != p2.X || p1.Y != p2.Y;
     }
 }
 
@@ -48,10 +42,10 @@ public class Cell
     }
 
 
-class AStar 
-{
+ static class AStar
+ {
 
-    private List<Point> GetPathToCell(Cell cell)
+    private static  List<Point> GetPathToCell(Cell cell)
     {
         List<Point> result = new List<Point>();
         var activCell = cell;
@@ -65,14 +59,14 @@ class AStar
         return result;
     }
 
-    private int CalculatePathLength(Point start, Point end)
+    private static int CalculatePathLength(Point start, Point end)
     {
         int deltaX = Math.Abs(start.X - end.X);
         int deltaY = Math.Abs(start.Y - end.Y);
         return deltaX + deltaY;
     }
 
-    public List<Point> CalculatePathCellsList(int[,] field, Point start, Point end)
+    public static List<Point> CalculatePathCellsList(int[,] field, Point start, Point end)
     {
         var closedCells = new List<Cell>();
         var activeCells = new List<Cell>();
@@ -95,7 +89,7 @@ class AStar
             activeCells.Remove(activeCell);
             closedCells.Add(activeCell);
 
-            foreach (var nearCell in NearCells(activeCell, end, field))
+            foreach (var nearCell in GetNearCells(activeCell, end, field))
             {
                 if (closedCells.Count(cell => cell.Position == nearCell.Position) > 0)
                     continue;
@@ -115,7 +109,7 @@ class AStar
         return null;
     }
 
-    private List<Cell> NearCells(Cell cell,Point end, int[,] field)
+    private static List<Cell> GetNearCells(Cell cell,Point end, int[,] field)
     {
         List<Cell> result = new List<Cell>();
 
@@ -147,7 +141,7 @@ class AStar
     }
 
 
-    public List<Vector3> PointToVector3(int[,] field, Vector3 start, Vector3 end)
+    public static List<Vector3> CalculatePathVectorList(int[,] field, Vector3 start, Vector3 end)
     {
         Point startPoint = new Point((int)start.x, (int)start.z);
         Point endPoint = new Point((int)end.x, (int)end.z);

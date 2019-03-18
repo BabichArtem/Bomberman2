@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingObject : MonoBehaviour
+public abstract class MovingObject : MonoBehaviour
 {
+    protected float ObjectSpeed { get; set; }
 
-    public LayerMask blockingLayer;
-    protected float ObjectSpeed = 3.0f;
     private bool stepFinished = true;
-
-    protected BoxCollider boxCollider;
 
     private IEnumerator coroutine;
 
@@ -21,9 +18,6 @@ public class MovingObject : MonoBehaviour
         Right,
         Idle
     }
-
-
-    // Update is called once per frame
 
     IEnumerator MoveFromTo(GameObject objectToMove, Vector3 startPosition, Vector3 endPosition)
     {
@@ -43,12 +37,12 @@ public class MovingObject : MonoBehaviour
 
     }
 
-    public Vector3 GetPosition(GameObject gameObject)
+    protected Vector3 GetPosition(GameObject gameObject)
     {
         return gameObject.transform.position;
     }
 
-    private void MoveObject(GameObject movingObject, Vector3 startPosition, Vector3 endPosition)
+    protected void MoveObject(GameObject movingObject, Vector3 startPosition, Vector3 endPosition)
     {
         if (stepFinished)
         {
@@ -58,17 +52,14 @@ public class MovingObject : MonoBehaviour
 
     }
 
-    private bool CanMove(Vector3 startPosition, Vector3 endPosition)
+    protected bool CanMove(Vector3 startPosition, Vector3 endPosition)
     {
-        bool hit;
-       // boxCollider.enabled = false;
-       
-        hit = Physics.Linecast(startPosition, endPosition, blockingLayer);
-        //boxCollider.enabled = true;
+        LayerMask mask = LayerMask.GetMask("BlockingLayer");
+        bool hit = Physics.Linecast(startPosition, endPosition, mask);
         return !hit;
     }
 
-    public bool AttempMove(GameObject movingObject, Side movingSide)
+    protected  bool AttempMove(GameObject movingObject, Side movingSide)
     {
         Vector3 startPosition = GetPosition(movingObject);
         Vector3 endPosition = CalculateSideVector(startPosition, movingSide);
@@ -76,17 +67,14 @@ public class MovingObject : MonoBehaviour
         if (canMove)
         {
             MoveObject(movingObject, startPosition, endPosition);
-            return true;
-        }
-        else
-        {
-            return false;
         }
 
-
+        return canMove;
     }
 
-    private Vector3 CalculateSideVector(Vector3 vector, Side side)
+
+
+    protected Vector3 CalculateSideVector(Vector3 vector, Side side)
     {
         switch (side)
         {

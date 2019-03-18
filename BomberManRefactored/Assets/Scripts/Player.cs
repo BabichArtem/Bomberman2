@@ -7,23 +7,22 @@ using UnityEngine.EventSystems;
 
 public class Player : MovingObject
 {
-    private GameObject player;
 
     public GameObject bomb;
 
+    [SerializeField] private float bombRate = 0.5f;
+    private float PlayerSpeed = 3.0f;
+
+    private float nextBomb;
+
     private Transform bombsHolder;
 
-    private KeyCode[] EventKeys =
-    {
-        KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.Space
-    };
 
 
     void Start()
     {
-        player = this.gameObject;
-        boxCollider = GetComponent<BoxCollider>();
         bombsHolder = new GameObject("Bombs").transform;
+        ObjectSpeed = PlayerSpeed;
     }
 
 
@@ -41,18 +40,31 @@ public class Player : MovingObject
                 direction = Side.Left;
             else if (Input.GetKey(KeyCode.RightArrow))
                 direction = Side.Right;
+
             if (Input.GetKey(KeyCode.Space))
             {
-                Vector3 position = GetPosition(player);
-                
-                GameObject instance = Instantiate(bomb, position, Quaternion.identity);
-                instance.transform.SetParent(bombsHolder);
+               SpawnBomb();
             }
 
-            bool playerMoved = AttempMove(player, direction);
-            
+            if (direction != Side.Idle)
+            {
+                AttempMove(gameObject, direction);
+            }
+
         }
     }
+
+    private void SpawnBomb()
+    {
+        if (Time.time>nextBomb)
+        {
+            nextBomb = Time.time + bombRate;
+            Vector3 position = GetPosition(gameObject);
+            GameObject instance = Instantiate(bomb, position, Quaternion.identity);
+            instance.transform.SetParent(bombsHolder);
+        }
+    }
+
 }
    
 

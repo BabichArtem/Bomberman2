@@ -5,24 +5,53 @@ using UnityEngine;
 public class Bomb : MonoBehaviour
 {
     public GameObject explosionEffect;
+    private float bombTimer = 2.0f;
+    [SerializeField] float destroyDistance = 1.9f;
+     
+
     void Start()
     {
-        StartCoroutine(ActivateBomb(2.0f));
+        StartCoroutine(ActivateBomb());
     }
-    IEnumerator ActivateBomb(float timeToDestroy)
+
+
+
+    private void CheckAllCollisions()
     {
-        yield return new WaitForSeconds(timeToDestroy);
-        StartCoroutine(ExplodeBomb(2.0f));
-        yield return new WaitForSeconds(timeToDestroy);
+        Vector3[] sides = {Vector3.forward, Vector3.back, Vector3.left, Vector3.right};
+        RaycastHit hit;
+        for (int i = 0; i < 4; i++)
+        {
+            if (CheckSideCollision(sides[i],out hit))
+            {
+                CheckTagAndDestroy(hit.transform.gameObject);
+            }
+        }
+
+    }
+
+    bool CheckSideCollision(Vector3 side, out RaycastHit hit )
+    {
+        return Physics.Raycast(transform.position, transform.TransformDirection(side), out hit, destroyDistance);
+    }
+
+    private void CheckTagAndDestroy(GameObject obj)
+    {
+        if (obj.tag == "Player" || obj.tag == "Enemy" || obj.tag == "CollapsingWall")
+        {
+            Destroy(obj);
+        }
+    }
+
+
+    private IEnumerator ActivateBomb()
+    {
+        yield return new WaitForSeconds(bombTimer);
+        //GameObject exploded = Instantiate(explosionEffect, this.transform.position, Quaternion.identity);
+        CheckAllCollisions();
+
+       // Destroy(exploded);
         Destroy(this.gameObject);
-
-    }
-
-    private IEnumerator ExplodeBomb(float timeToDestroy)
-    {
-        GameObject exploded = Instantiate(explosionEffect, this.transform.position, Quaternion.identity);
-        yield return new WaitForSeconds(timeToDestroy);
-        Destroy(exploded);
 
     }
 }
