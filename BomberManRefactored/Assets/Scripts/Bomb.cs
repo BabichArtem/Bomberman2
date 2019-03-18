@@ -5,9 +5,7 @@ using UnityEngine;
 public class Bomb : MonoBehaviour
 {
     public GameObject explosionEffect;
-    private float bombTimer = 2.0f;
-    [SerializeField] float destroyDistance = 2.0f;
-     
+    private float bombTimer = 2.0f;    
 
     void Start()
     {
@@ -31,8 +29,8 @@ public class Bomb : MonoBehaviour
     }
 
     bool CheckSideCollision(Vector3 side, out RaycastHit hit )
-    {
-        return Physics.Raycast(transform.position, transform.TransformDirection(side), out hit, destroyDistance);
+    {        
+        return Physics.Raycast(transform.position, transform.TransformDirection(side), out hit, 1.0f);
     }
 
     private void CheckTagAndDestroy(GameObject obj)

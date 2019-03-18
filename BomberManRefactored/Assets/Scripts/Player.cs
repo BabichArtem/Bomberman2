@@ -11,8 +11,14 @@ public class Player : MovingObject
     public GameObject bomb;
 
     [SerializeField] private float bombRate = 0.5f;
-    private float PlayerSpeed = 3.0f;
+    private static float PlayerSpeed { get; set; } = 2.0f;
+    private static int BombCount { get; set; } = 1;
+    private static float BombDamageDistance { get; set; } = 1;
 
+    private static bool WallWalking { get; set; } = false;
+
+
+    private int bombSpawnedCount = 0;
     private float nextBomb;
 
     private Transform bombsHolder;
@@ -53,6 +59,7 @@ public class Player : MovingObject
 
         }
     }
+    
 
     private void SpawnBomb()
     {
@@ -62,6 +69,31 @@ public class Player : MovingObject
             Vector3 position = GetPosition(gameObject);
             GameObject instance = Instantiate(bomb, position, Quaternion.identity);
             instance.transform.SetParent(bombsHolder);
+        }
+    }
+
+
+
+
+    public static void GetPowerUp(PowerUp.PowerUpType powerUpType)
+    {
+        switch (powerUpType)
+        {
+            case PowerUp.PowerUpType.BombCount:
+                BombCount += 1;
+                break;
+            case PowerUp.PowerUpType.Speed:
+                PlayerSpeed += 1;
+                break;
+            case PowerUp.PowerUpType.BombDistance:
+                BombDamageDistance += 1;
+                break;
+            case PowerUp.PowerUpType.WallWalking:
+                WallWalking = true;
+                break;
+         
+            default:
+                break;
         }
     }
 
