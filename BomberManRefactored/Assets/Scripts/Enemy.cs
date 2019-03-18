@@ -8,8 +8,6 @@ public class Enemy : MovingObject
 {
     private float EnemySpeed = 2.0f;
 
-    private List<Vector3> findedPath;
-
     void Start()
     {
         ObjectSpeed = EnemySpeed;
@@ -22,71 +20,38 @@ public class Enemy : MovingObject
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.tag=="Player")
+        if (col.tag == "Player")
         {
             Destroy(col.gameObject);
         }
-        
+
     }
 
     public Side RandomSide()
     {
         Array values = Enum.GetValues(typeof(Side));
-        Side randomSide = (Side) values.GetValue(Random.Range(0, values.Length));
+        Side randomSide = (Side)values.GetValue(Random.Range(0, values.Length));
         return randomSide;
     }
 
-
-
-    public void MoveEnemy()
+    protected virtual Side GetMovingSide()
     {
-        Vector3 enemyPosition =GetEnemyPosition();
-        Vector3 playerPosition = GetPlayerPosition();
-        CalculatePath(enemyPosition, playerPosition);
-        Side movingSide = Side.Idle;
-
-        if (findedPath != null)
-        {
-            Vector3 nextCell = findedPath[1];
-
-            if (nextCell.x < enemyPosition.x)
-            {
-                movingSide = Side.Left;
-            }
-            else if (nextCell.x > enemyPosition.x)
-            {
-                movingSide = Side.Right;
-            }
-            else if (nextCell.z > enemyPosition.z)
-            {
-                movingSide = Side.Up;
-            }
-            else if (nextCell.z < enemyPosition.z)
-            {
-                movingSide = Side.Down;
-            }
-            AttempMove(gameObject, movingSide);
-        }
-        else
-        {
-            Debug.Log("Null");
-        }
+        return RandomSide();
     }
 
-    Vector3 GetPlayerPosition()
+    protected virtual void MoveEnemy()
+    {
+        AttempMove(gameObject, GetMovingSide());
+    }
+
+    protected Vector3 GetPlayerPosition()
     {
         return GameObject.FindGameObjectWithTag("Player").transform.position;
     }
 
-    Vector3 GetEnemyPosition()
+    protected Vector3 GetEnemyPosition()
     {
         return this.transform.position;
     }
 
-    void CalculatePath(Vector3 startPosition, Vector3 endPosition)
-    {
-        
-        findedPath = new List<Vector3>();
-        findedPath = AStar.CalculatePathVectorList(BoardManager.field, startPosition, endPosition);
-    }   
 }

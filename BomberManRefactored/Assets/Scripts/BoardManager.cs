@@ -9,14 +9,16 @@ public class BoardManager : MonoBehaviour
     public GameObject CollapsingWallsPrefab;
     public GameObject PlayerPrefab;
     public GameObject EnemyPrefab;
+    public GameObject SmartEnemyPrefab;
 
 
-    [SerializeField] public int xSize = 35;
-    [SerializeField] public int zSize = 35;
+
+    [SerializeField] public int xSize = 17;
+    [SerializeField] public int zSize = 17;
 
     public static int[,] field;
 
-    [SerializeField] private int collapsingWallsCount = 50;
+    [SerializeField] private int collapsingWallsCount = 20;
 
     private float floorHeight = 0.0f;
     private float ObjectsHeight = 0.4f;
@@ -37,10 +39,9 @@ public class BoardManager : MonoBehaviour
         LayoutPlayer();
         for (int i = 0; i < level; i++)
         {
-            LayoutEnemy();
+            LayoutEnemy(false);
         }
-        
-
+        LayoutEnemy(true);
     }
 
 
@@ -51,12 +52,12 @@ public class BoardManager : MonoBehaviour
             for (int z = 0; z < zSize; z++)
             {
 
-                Vector3 position = new Vector3(x,ObjectsHeight,z);
+                Vector3 position = new Vector3(x, ObjectsHeight, z);
                 GameObject instance;
-                if ((x == 0 || x == xSize - 1 || z == 0 || z == zSize - 1)||(x % 2 == 0 && z % 2 == 0))
+                if ((x == 0 || x == xSize - 1 || z == 0 || z == zSize - 1) || (x % 2 == 0 && z % 2 == 0))
                 {
-                   instance = Instantiate(StaticWallsPrefab, position, Quaternion.identity);
-                   field[x, z] = 1;
+                    instance = Instantiate(StaticWallsPrefab, position, Quaternion.identity);
+                    field[x, z] = 1;
                 }
                 else
                 {
@@ -78,7 +79,7 @@ public class BoardManager : MonoBehaviour
             {
                 if (!(x % 2 == 0 && z % 2 == 0))
                 {
-                    Vector3 freeCell = new Vector3(x,ObjectsHeight,z);
+                    Vector3 freeCell = new Vector3(x, ObjectsHeight, z);
                     freeCells.Add(freeCell);
                 }
             }
@@ -111,10 +112,13 @@ public class BoardManager : MonoBehaviour
         Instantiate(PlayerPrefab, position, Quaternion.identity);
     }
 
-    void LayoutEnemy()
+    void LayoutEnemy(bool isEnemySmart)
     {
         Vector3 position = RandomPosition();
-        Instantiate(EnemyPrefab, position, Quaternion.identity);
+        if (!isEnemySmart)
+            Instantiate(EnemyPrefab, position, Quaternion.identity);
+        else
+            Instantiate(SmartEnemyPrefab, position, Quaternion.identity);
     }
 
 

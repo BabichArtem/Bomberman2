@@ -6,7 +6,7 @@ public class Bomb : MonoBehaviour
 {
     public GameObject explosionEffect;
     private float bombTimer = 2.0f;
-    [SerializeField] float destroyDistance = 1.9f;
+    [SerializeField] float destroyDistance = 2.0f;
      
 
     void Start()

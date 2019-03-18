@@ -141,7 +141,7 @@ public class Cell
     }
 
 
-    public static List<Vector3> CalculatePathVectorList(int[,] field, Vector3 start, Vector3 end)
+    private static List<Vector3> CalculatePathVectorList(int[,] field, Vector3 start, Vector3 end)
     {
         Point startPoint = new Point((int)start.x, (int)start.z);
         Point endPoint = new Point((int)end.x, (int)end.z);
@@ -154,5 +154,13 @@ public class Cell
         }
 
         return findedPathVector3;
+    }
+
+    public static Vector3 GetNextCellVector(int[,] field, Vector3 start, Vector3 end)
+    {
+        Point startPoint = new Point((int)start.x, (int)start.z);
+        Point endPoint = new Point((int)end.x, (int)end.z);
+        List<Point> pointList = CalculatePathCellsList(field, startPoint, endPoint);
+        return new Vector3(pointList[1].X, 0.0f, pointList[1].Y);
     }
 }

@@ -66,5 +66,8 @@ MonoBehaviour:
     type: 3}
   EnemyPrefab: {fileID: 3467064154768905892, guid: 1dc5fb39bd3de4945914059299b02b15,
     type: 3}
-  xSize: 35
-  zSize: 35
+  SmartEnemyPrefab: {fileID: 3467064154768905892, guid: 24d1eec6eafeab542906cb5e2a5e5cf8,
+    type: 3}
+  xSize: 17
+  zSize: 17
+  collapsingWallsCount: 30
