@@ -83,7 +83,7 @@ public class Cell
         while (activeCells.Count > 0)
         {
             var activeCell = activeCells.OrderBy(cell => cell.FullPathLength).First();
-            
+                      
             if (activeCell.Position == end)
                 return GetPathToCell(activeCell);
             activeCells.Remove(activeCell);

@@ -14,12 +14,12 @@ public class BoardManager : MonoBehaviour
     public GameObject[] PowerUpPrefabs;
 
 
-    [SerializeField] public int xSize = 17;
-    [SerializeField] public int zSize = 17;
+    [SerializeField] public int xSize = 13;
+    [SerializeField] public int zSize = 13;
 
     public int[,] Field;
 
-    [SerializeField] private int CollapsingWallsCount = 20;
+    [SerializeField] private int CollapsingWallsCount = 5;
 
     private float floorHeight = 0.0f;
     private float ObjectsHeight = 0.4f;
@@ -50,11 +50,13 @@ public class BoardManager : MonoBehaviour
         LayoutPowerUp(PowerUpPrefabs[3], 1);
 
         LayoutPlayer();
+       /* 
         for (int i = 0; i < level; i++)
         {
             LayoutEnemy(false);
         }
         LayoutEnemy(true);
+        */
     }
 
 
@@ -165,6 +167,22 @@ public class BoardManager : MonoBehaviour
     public void DestroyCollapsingWall(int x, int z)
     {
         Field[x, z] = 0;
+    }
+
+
+
+    public void ChangeCollapsingWallTransparency()
+    {
+        int children = boardHolder.childCount;
+        for (int i = 0; i < children; ++i)
+        {
+            GameObject collapsingWall = boardHolder.GetChild(i).gameObject;
+            if (collapsingWall.tag == "CollapsingWall")
+            {
+                collapsingWall.GetComponent<MeshRenderer>().material.color = new Color(0.2f, 0.1f, .5f, 0.1f);
+            }
+        }
+
     }
 
 

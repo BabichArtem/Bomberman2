@@ -4,28 +4,37 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Player : MovingObject
 {
 
     public GameObject BombPrefab;
-
+    BoardManager boardManager;
     private List<Bomb> bombs;
+
+    private UI UIScript;
 
     [SerializeField] private float bombRate = 0.5f;
     private float PlayerSpeed { get; set; } = 2.0f;
     private int BombCount { get; set; } = 1;
     private float BombDamageDistance { get; set; } = 1;
     private static bool WallWalking { get; set; } = false;
-
-    private float nextBomb;
+    GameObject trail;
+    private float nextBombTime;
 
     private Transform bombsHolder;
 
 
 
+
+
     void Start()
     {
+        trail = GameObject.Find("Trail");
+        trail.SetActive(false);
+        boardManager = GameObject.Find("GameManager").GetComponent<BoardManager>();
+        UIScript = GameObject.Find("Canvas").GetComponent<UI>();
         bombs = new List<Bomb>();
         bombsHolder = new GameObject("Bombs").transform;
         
@@ -86,16 +95,16 @@ public class Player : MovingObject
 
     private void SpawnBomb()
     {
-        if (Time.time>nextBomb && bombs.Count<BombCount)
+        if (Time.time>nextBombTime && bombs.Count<BombCount)
         {
-            nextBomb = Time.time + bombRate;
+            nextBombTime = Time.time + bombRate;
             Vector3 position = GetPosition(gameObject);
             GameObject instance = Instantiate(BombPrefab, position, Quaternion.identity);
             instance.transform.SetParent(bombsHolder);
             Bomb bombScript = instance.gameObject.GetComponent<Bomb>();
             bombScript.DamageDistance = BombDamageDistance;
-            bombs.Add(bombScript);
             
+            bombs.Add(bombScript);            
         }
     }
 
@@ -119,20 +128,32 @@ public class Player : MovingObject
         {
             case PowerUp.PowerUpType.BombCount:
                 BombCount += 1;
+                UIScript.ChangeText(1,BombCount.ToString());
                 break;
             case PowerUp.PowerUpType.Speed:
                 PlayerSpeed += 2;
+                UIScript.ChangeText(0, PlayerSpeed.ToString());
+                trail.SetActive(true);
                 break;
             case PowerUp.PowerUpType.BombDistance:
                 BombDamageDistance += 1;
+                UIScript.ChangeText(2, BombDamageDistance.ToString());
+                
                 break;
             case PowerUp.PowerUpType.WallWalking:
-                WallWalking = true;
+                WallWalking = true;                
+                UIScript.ChangeText(3, "");
+                boardManager.ChangeCollapsingWallTransparency();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(poweUpType), poweUpType, null);
         }
+        
     }
+
+    
+   
+  
 }
    
 
