@@ -4,9 +4,8 @@ using UnityEngine;
 
 public abstract class MovingObject : MonoBehaviour
 {
-    protected float ObjectSpeed { get; set; }
 
-    private bool stepFinished = true;
+    public bool stepFinished = true;
 
     private IEnumerator coroutine;
 
@@ -19,10 +18,10 @@ public abstract class MovingObject : MonoBehaviour
         Idle
     }
 
-    IEnumerator MoveFromTo(GameObject objectToMove, Vector3 startPosition, Vector3 endPosition)
+    IEnumerator MoveFromTo(GameObject objectToMove, Vector3 startPosition, Vector3 endPosition, float objectSpeed)
     {
         stepFinished = false;
-        float step = (ObjectSpeed / (startPosition - endPosition).magnitude) * Time.fixedDeltaTime;
+        float step = (objectSpeed / (startPosition - endPosition).magnitude) * Time.fixedDeltaTime;
         float t = 0;
         while (t <= 1.0f)
         {
@@ -42,37 +41,36 @@ public abstract class MovingObject : MonoBehaviour
         return gameObject.transform.position;
     }
 
-    protected void MoveObject(GameObject movingObject, Vector3 startPosition, Vector3 endPosition)
+    protected void MoveObject(GameObject movingObject, Vector3 startPosition, Vector3 endPosition,float objectSpeed)
     {
         if (stepFinished)
         {
-            coroutine = MoveFromTo(movingObject, startPosition, endPosition);
+            coroutine = MoveFromTo(movingObject, startPosition, endPosition, objectSpeed);
             StartCoroutine(coroutine);
         }
 
     }
 
-    protected bool CanMove(Vector3 startPosition, Vector3 endPosition)
+    protected virtual bool CanMove(Vector3 startPosition, Vector3 endPosition)
     {
         LayerMask mask = LayerMask.GetMask("BlockingLayer");
-        bool hit = Physics.Linecast(startPosition, endPosition, mask);
-        return !hit;
+        Ray ray = new Ray(startPosition,endPosition-startPosition);
+        bool detected = Physics.Raycast(ray,1.0f,mask);
+        return !detected;
     }
 
-    protected  bool AttempMove(GameObject movingObject, Side movingSide)
+    protected virtual bool AttempMove(GameObject movingObject, Side movingSide,float objectSpeed)
     {
         Vector3 startPosition = GetPosition(movingObject);
         Vector3 endPosition = CalculateSideVector(startPosition, movingSide);
         bool canMove = CanMove(startPosition, endPosition);
         if (canMove)
         {
-            MoveObject(movingObject, startPosition, endPosition);
+            MoveObject(movingObject, startPosition, endPosition, objectSpeed);
         }
 
         return canMove;
     }
-
-
 
     protected Vector3 CalculateSideVector(Vector3 vector, Side side)
     {

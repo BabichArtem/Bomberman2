@@ -8,17 +8,16 @@ using UnityEngine.EventSystems;
 public class Player : MovingObject
 {
 
-    public GameObject bomb;
+    public GameObject BombPrefab;
+
+    private List<Bomb> bombs;
 
     [SerializeField] private float bombRate = 0.5f;
-    private static float PlayerSpeed { get; set; } = 2.0f;
-    private static int BombCount { get; set; } = 1;
-    private static float BombDamageDistance { get; set; } = 1;
-
+    private float PlayerSpeed { get; set; } = 2.0f;
+    private int BombCount { get; set; } = 1;
+    private float BombDamageDistance { get; set; } = 1;
     private static bool WallWalking { get; set; } = false;
 
-
-    private int bombSpawnedCount = 0;
     private float nextBomb;
 
     private Transform bombsHolder;
@@ -27,14 +26,16 @@ public class Player : MovingObject
 
     void Start()
     {
+        bombs = new List<Bomb>();
         bombsHolder = new GameObject("Bombs").transform;
-        ObjectSpeed = PlayerSpeed;
+        
     }
 
 
     // Update is called once per frame
     void Update()
     {
+        CheckBombs();
         if (Input.anyKey)
         {
             Side direction = Side.Idle;
@@ -49,41 +50,78 @@ public class Player : MovingObject
 
             if (Input.GetKey(KeyCode.Space))
             {
-               SpawnBomb();
+                SpawnBomb();
             }
 
             if (direction != Side.Idle)
             {
-                AttempMove(gameObject, direction);
+                AttempMove(gameObject, direction, PlayerSpeed);
             }
 
         }
     }
-    
+
+
+
+    protected override bool CanMove(Vector3 startPosition, Vector3 endPosition)
+    {
+        LayerMask mask = LayerMask.GetMask("BlockingLayer");
+        Ray ray = new Ray(startPosition, endPosition - startPosition);
+        RaycastHit hitInfo;
+        bool detected = Physics.Raycast(ray,out hitInfo,1.0f, mask);
+        if (detected)
+        {
+            if (hitInfo.transform.tag == "StaticWall")
+            {
+                return false;
+            }
+
+            if (hitInfo.transform.tag == "CollapsingWall" && WallWalking)
+            {
+                return true;
+            }
+        }
+        return !detected;
+    }
 
     private void SpawnBomb()
     {
-        if (Time.time>nextBomb)
+        if (Time.time>nextBomb && bombs.Count<BombCount)
         {
             nextBomb = Time.time + bombRate;
             Vector3 position = GetPosition(gameObject);
-            GameObject instance = Instantiate(bomb, position, Quaternion.identity);
+            GameObject instance = Instantiate(BombPrefab, position, Quaternion.identity);
             instance.transform.SetParent(bombsHolder);
+            Bomb bombScript = instance.gameObject.GetComponent<Bomb>();
+            bombScript.DamageDistance = BombDamageDistance;
+            bombs.Add(bombScript);
+            
         }
     }
 
-
-
-
-    public static void GetPowerUp(PowerUp.PowerUpType powerUpType)
+    private void CheckBombs()
     {
-        switch (powerUpType)
+        if (bombs.Count>0)
+        {
+            foreach (var bomb in bombs)
+            {
+                if (bomb == null || bomb.bombDestroyed)
+                {
+                    bombs.Remove(bomb);
+                }
+            }
+        }
+    }
+
+    public void ApplyPowerUp(PowerUp.PowerUpType poweUpType)
+    {
+        switch (poweUpType)
         {
             case PowerUp.PowerUpType.BombCount:
                 BombCount += 1;
                 break;
             case PowerUp.PowerUpType.Speed:
-                PlayerSpeed += 1;
+                PlayerSpeed += 2;
                 break;
             case PowerUp.PowerUpType.BombDistance:
                 BombDamageDistance += 1;
@@ -91,12 +129,10 @@ public class Player : MovingObject
             case PowerUp.PowerUpType.WallWalking:
                 WallWalking = true;
                 break;
-         
             default:
-                break;
+                throw new ArgumentOutOfRangeException(nameof(poweUpType), poweUpType, null);
         }
     }
-
 }
    
 

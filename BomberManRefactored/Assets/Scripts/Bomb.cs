@@ -5,14 +5,15 @@ using UnityEngine;
 public class Bomb : MonoBehaviour
 {
     public GameObject explosionEffect;
-    private float bombTimer = 2.0f;    
+    private float bombTimer = 2.0f;
+
+    public float DamageDistance { get; set; }
+    public bool bombDestroyed = false;
 
     void Start()
     {
         StartCoroutine(ActivateBomb());
     }
-
-
 
     private void CheckAllCollisions()
     {
@@ -28,28 +29,64 @@ public class Bomb : MonoBehaviour
 
     }
 
-    bool CheckSideCollision(Vector3 side, out RaycastHit hit )
+    bool CheckSideCollision(Vector3 side, out RaycastHit hit)
     {        
-        return Physics.Raycast(transform.position, transform.TransformDirection(side), out hit, 1.0f);
+        return Physics.Raycast(transform.position, transform.TransformDirection(side), out hit, DamageDistance);
     }
 
     private void CheckTagAndDestroy(GameObject obj)
     {
-        if (obj.tag == "Player" || obj.tag == "Enemy" || obj.tag == "CollapsingWall")
+        if (obj.tag == "Player")
         {
-            Destroy(obj);
+            DestroyPlayer(obj);
         }
+
+        if (obj.tag == "Enemy")
+        {
+            DestroyEnemy(obj);
+        }
+
+        if (obj.tag == "CollapsingWall")
+        {
+            DestroyCollapsingWall(obj);
+        }
+
     }
 
+    private void DestroyPlayer(GameObject player)
+    {
+        Destroy(player);
+    }
+
+    private void DestroyEnemy(GameObject enemy)
+    {
+        Destroy(enemy);
+    }
+
+    private void DestroyCollapsingWall(GameObject wall)
+    {
+        BoardManager boardManager = GameObject.Find("GameManager").GetComponent<BoardManager>();
+        boardManager.DestroyCollapsingWall((int) wall.transform.position.x, (int) wall.transform.position.z);
+        foreach (var powerUp in boardManager.PowerUpsList)
+        {
+            if (powerUp != null)
+            {
+                if (powerUp.transform.position == wall.transform.position)
+                {
+                    powerUp.gameObject.SetActive(true);
+                }
+            }
+        }
+        Destroy(wall);
+    }
 
     private IEnumerator ActivateBomb()
     {
         yield return new WaitForSeconds(bombTimer);
         //GameObject exploded = Instantiate(explosionEffect, this.transform.position, Quaternion.identity);
         CheckAllCollisions();
-
+        bombDestroyed = true;
        // Destroy(exploded);
         Destroy(this.gameObject);
-
     }
 }

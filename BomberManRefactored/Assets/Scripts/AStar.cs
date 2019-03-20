@@ -99,7 +99,6 @@ public class Cell
                     activeCells.Add(nearCell);
                 else if (openCell.PathLengthFromStart > nearCell.PathLengthFromStart)
                 {
-
                     openCell.PreviousCell = activeCell;
                     openCell.PathLengthFromStart = nearCell.PathLengthFromStart;
                 }

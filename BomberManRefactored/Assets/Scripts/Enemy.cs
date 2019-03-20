@@ -8,11 +8,6 @@ public class Enemy : MovingObject
 {
     private float EnemySpeed = 2.0f;
 
-    void Start()
-    {
-        ObjectSpeed = EnemySpeed;
-    }
-
     void Update()
     {
         MoveEnemy();
@@ -41,7 +36,10 @@ public class Enemy : MovingObject
 
     protected virtual void MoveEnemy()
     {
-        AttempMove(gameObject, GetMovingSide());
+        if (stepFinished)
+        {
+            AttempMove(gameObject, GetMovingSide(), EnemySpeed);
+        }
     }
 
     protected Vector3 GetPlayerPosition()

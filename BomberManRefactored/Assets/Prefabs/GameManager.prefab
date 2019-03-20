@@ -68,6 +68,11 @@ MonoBehaviour:
     type: 3}
   SmartEnemyPrefab: {fileID: 3467064154768905892, guid: 24d1eec6eafeab542906cb5e2a5e5cf8,
     type: 3}
+  PowerUpPrefabs:
+  - {fileID: 3676572402089251941, guid: 45b99d672b2c4e949b595102131d9f5a, type: 3}
+  - {fileID: 3676572402089251941, guid: 3a96e07f86645e44eaafd738288058db, type: 3}
+  - {fileID: 3676572402089251941, guid: 20453a64aa99f5647b9e43da82940b34, type: 3}
+  - {fileID: 3676572402089251941, guid: 08827633869027f4e8e4f7e433d60aaa, type: 3}
   xSize: 17
   zSize: 17
-  collapsingWallsCount: 30
+  collapsingWallsCount: 50

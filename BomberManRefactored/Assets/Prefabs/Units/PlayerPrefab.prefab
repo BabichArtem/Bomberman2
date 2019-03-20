@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6422276825942750312}
   - component: {fileID: 5166963246972656947}
   - component: {fileID: 6495741109661369351}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 7774271318268210172}
   - component: {fileID: 6310529676602214799}
   - component: {fileID: 1706309653029914846}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 0.9, y: 0.9, z: 0.9}
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!54 &6310529676602214799
 Rigidbody:
@@ -153,7 +153,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 040392c5b83e1b84c9262bd2eb108a6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bomb: {fileID: 7299975972107017753, guid: b608103821788bf4483c9551238d2a35, type: 3}
+  stepFinished: 1
+  BombPrefab: {fileID: 7299975972107017753, guid: b608103821788bf4483c9551238d2a35,
+    type: 3}
   bombRate: 0.5
 --- !u!1 &8030289679693874367
 GameObject:
@@ -167,7 +169,7 @@ GameObject:
   - component: {fileID: 4181856774594960662}
   - component: {fileID: 95044099129831745}
   - component: {fileID: 4310144203365858448}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}

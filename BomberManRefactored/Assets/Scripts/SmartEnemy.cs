@@ -4,25 +4,26 @@ using UnityEngine;
 
 public class SmartEnemy : Enemy
 {
+    private BoardManager boardScript;
+
+    private void Start()
+    {
+        boardScript = GameObject.Find("GameManager").GetComponent<BoardManager>();
+    }
 
     private void Update()
     {
         MoveEnemy();
     }
 
-    protected override void MoveEnemy()
-    {
-
-        base.MoveEnemy();
-
-    }
     protected override Side GetMovingSide()
     {
         Vector3 enemyPosition = GetEnemyPosition();
         Vector3 playerPosition = GetPlayerPosition();
 
         Side movingSide = Side.Idle;
-        Vector3 nextCell = AStar.GetNextCellVector(BoardManager.field, enemyPosition, playerPosition);
+       
+        Vector3 nextCell = AStar.GetNextCellVector(boardScript.Field, enemyPosition, playerPosition);
 
         if (nextCell != null)
         {

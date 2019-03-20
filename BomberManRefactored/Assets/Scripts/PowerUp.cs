@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class PowerUp : MonoBehaviour
 {
 
-    [SerializeField] PowerUpType PUType { get; set; }
+    public PowerUpType PUType;
 
     public enum PowerUpType
     {
@@ -15,12 +16,22 @@ public class PowerUp : MonoBehaviour
         WallWalking
     }
 
+    void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
     private void OnTriggerEnter(Collider unit)
     {
         if (unit.tag == "Player")
         {
-            Player.GetPowerUp(PUType);
+            var player = unit.gameObject.GetComponent<Player>();
+            player.ApplyPowerUp(PUType);
+            Destroy(this.gameObject);
         }
+        
     }
+
+    
 
 }
