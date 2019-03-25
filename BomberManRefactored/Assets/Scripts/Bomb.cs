@@ -12,10 +12,11 @@ public class Bomb : MonoBehaviour
 
     void Start()
     {
-        if (DamageDistance>1.0f)
+        if (DamageDistance > 1.0f)
         {
             gameObject.GetComponentInChildren<MeshRenderer>().material.color = new Color(0.2f, 0.1f, .5f, 0.1f);
         }
+
         StartCoroutine(ActivateBomb());
     }
 
@@ -25,7 +26,7 @@ public class Bomb : MonoBehaviour
         RaycastHit hit;
         for (int i = 0; i < 4; i++)
         {
-            if (CheckSideCollision(sides[i],out hit))
+            if (CheckSideCollision(sides[i], out hit))
             {
                 CheckTagAndDestroy(hit.transform.gameObject);
             }
@@ -34,8 +35,51 @@ public class Bomb : MonoBehaviour
     }
 
     bool CheckSideCollision(Vector3 side, out RaycastHit hit)
-    {        
+    {
         return Physics.Raycast(transform.position, transform.TransformDirection(side), out hit, DamageDistance);
+    }
+
+   
+    
+
+    private IEnumerator ActivateBomb()
+    {
+        yield return new WaitForSeconds(bombTimer);
+        explosionEffect.SetActive(true);
+        this.gameObject.GetComponentInChildren<Renderer>().enabled = false;
+        CheckAllCollisions();
+        bombDestroyed = true;
+        yield return new WaitForSeconds(bombTimer);
+        Destroy(this.gameObject);
+    }
+
+
+    private void DestroyCollapsingWall(GameObject wall)
+    {
+        BoardManager boardManager = GameObject.Find("GameManager").GetComponent<BoardManager>();
+        boardManager.DestroyCollapsingWall((int)wall.transform.position.x, (int)wall.transform.position.z);
+        foreach (var powerUp in boardManager.PowerUpsList)
+        {
+            if (powerUp != null)
+            {
+                if (powerUp.transform.position == wall.transform.position)
+                {
+                    powerUp.gameObject.SetActive(true);
+                }
+            }
+        }
+
+        Destroy(wall);
+    }
+
+    private void DestroyPlayer(GameObject player)
+    {
+        Destroy(player);
+    }
+
+    private void DestroyEnemy(GameObject enemy)
+    {
+        Destroy(enemy);
     }
 
     private void CheckTagAndDestroy(GameObject obj)
@@ -55,42 +99,5 @@ public class Bomb : MonoBehaviour
             DestroyCollapsingWall(obj);
         }
 
-    }
-
-    private void DestroyPlayer(GameObject player)
-    {
-        Destroy(player);
-    }
-
-    private void DestroyEnemy(GameObject enemy)
-    {
-        Destroy(enemy);
-    }
-
-    private void DestroyCollapsingWall(GameObject wall)
-    {
-        BoardManager boardManager = GameObject.Find("GameManager").GetComponent<BoardManager>();
-        boardManager.DestroyCollapsingWall((int) wall.transform.position.x, (int) wall.transform.position.z);
-        foreach (var powerUp in boardManager.PowerUpsList)
-        {
-            if (powerUp != null)
-            {
-                if (powerUp.transform.position == wall.transform.position)
-                {
-                    powerUp.gameObject.SetActive(true);
-                }
-            }
-        }
-        Destroy(wall);
-    }
-
-    private IEnumerator ActivateBomb()
-    {
-        yield return new WaitForSeconds(bombTimer);
-        //GameObject exploded = Instantiate(explosionEffect, this.transform.position, Quaternion.identity);
-        CheckAllCollisions();
-        bombDestroyed = true;
-       // Destroy(exploded);
-        Destroy(this.gameObject);
     }
 }

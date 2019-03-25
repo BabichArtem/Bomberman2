@@ -99,6 +99,8 @@ public class Player : MovingObject
         {
             nextBombTime = Time.time + bombRate;
             Vector3 position = GetPosition(gameObject);
+            position.x = Mathf.Round(position.x);
+            position.z = Mathf.Round(position.z);
             GameObject instance = Instantiate(BombPrefab, position, Quaternion.identity);
             instance.transform.SetParent(bombsHolder);
             Bomb bombScript = instance.gameObject.GetComponent<Bomb>();
@@ -131,7 +133,7 @@ public class Player : MovingObject
                 UIScript.ChangeText(1,BombCount.ToString());
                 break;
             case PowerUp.PowerUpType.Speed:
-                PlayerSpeed += 2;
+                PlayerSpeed = 4;
                 UIScript.ChangeText(0, PlayerSpeed.ToString());
                 trail.SetActive(true);
                 break;

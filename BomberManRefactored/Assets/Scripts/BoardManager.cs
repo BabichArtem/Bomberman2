@@ -179,7 +179,7 @@ public class BoardManager : MonoBehaviour
             GameObject collapsingWall = boardHolder.GetChild(i).gameObject;
             if (collapsingWall.tag == "CollapsingWall")
             {
-                collapsingWall.GetComponent<MeshRenderer>().material.color = new Color(0.2f, 0.1f, .5f, 0.1f);
+                collapsingWall.GetComponent<MeshRenderer>().material.color = new Color(0.2f, 0.1f, .5f, 0.5f);
             }
         }
 
