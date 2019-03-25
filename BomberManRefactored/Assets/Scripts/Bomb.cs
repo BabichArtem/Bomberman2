@@ -74,7 +74,7 @@ public class Bomb : MonoBehaviour
 
     private void DestroyPlayer(GameObject player)
     {
-        Destroy(player);
+        player.GetComponentInParent<Player>().PlayerDeath();
     }
 
     private void DestroyEnemy(GameObject enemy)

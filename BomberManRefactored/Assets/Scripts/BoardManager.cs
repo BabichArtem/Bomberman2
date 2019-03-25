@@ -14,12 +14,12 @@ public class BoardManager : MonoBehaviour
     public GameObject[] PowerUpPrefabs;
 
 
-    [SerializeField] public int xSize = 13;
-    [SerializeField] public int zSize = 13;
+    [SerializeField] public int xSize = 17;
+    [SerializeField] public int zSize = 17;
 
     public int[,] Field;
 
-    [SerializeField] private int CollapsingWallsCount = 5;
+    [SerializeField] private int CollapsingWallsCount = 7;
 
     private float floorHeight = 0.0f;
     private float ObjectsHeight = 0.4f;
@@ -50,13 +50,12 @@ public class BoardManager : MonoBehaviour
         LayoutPowerUp(PowerUpPrefabs[3], 1);
 
         LayoutPlayer();
-       /* 
+
         for (int i = 0; i < level; i++)
         {
             LayoutEnemy(false);
         }
         LayoutEnemy(true);
-        */
     }
 
 
@@ -139,6 +138,7 @@ public class BoardManager : MonoBehaviour
     void LayoutPlayer()
     {
         Vector3 position = GetRandomPosition(ref FreeCells);
+        position.y -= 0.4f;
         Instantiate(PlayerPrefab, position, Quaternion.identity);
     }
 
@@ -168,6 +168,7 @@ public class BoardManager : MonoBehaviour
     {
         Field[x, z] = 0;
     }
+
 
 
 

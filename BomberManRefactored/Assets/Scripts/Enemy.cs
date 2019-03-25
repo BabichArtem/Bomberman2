@@ -17,7 +17,8 @@ public class Enemy : MovingObject
     {
         if (col.tag == "Player")
         {
-            Destroy(col.gameObject);
+            col.GetComponentInParent<Player>().PlayerDeath();
+         //   Destroy(col.gameObject);
         }
 
     }

@@ -10,9 +10,10 @@ public class Player : MovingObject
 {
 
     public GameObject BombPrefab;
-    BoardManager boardManager;
-    private List<Bomb> bombs;
+    private Animator animator;
 
+    BoardManager boardManager;
+    
     private UI UIScript;
 
     [SerializeField] private float bombRate = 0.5f;
@@ -22,6 +23,7 @@ public class Player : MovingObject
     private static bool WallWalking { get; set; } = false;
     GameObject trail;
     private float nextBombTime;
+    private List<Bomb> bombs;
 
     private Transform bombsHolder;
 
@@ -31,8 +33,9 @@ public class Player : MovingObject
 
     void Start()
     {
-        trail = GameObject.Find("Trail");
-        trail.SetActive(false);
+        //   trail = GameObject.Find("Trail");
+        // trail.SetActive(false);
+        animator = GetComponent<Animator>();
         boardManager = GameObject.Find("GameManager").GetComponent<BoardManager>();
         UIScript = GameObject.Find("Canvas").GetComponent<UI>();
         bombs = new List<Bomb>();
@@ -67,6 +70,15 @@ public class Player : MovingObject
                 AttempMove(gameObject, direction, PlayerSpeed);
             }
 
+        }
+
+        if(stepFinished)
+        {
+            animator.SetBool("PlayerAnimationRun", false);
+        }
+        else
+        {
+            animator.SetBool("PlayerAnimationRun", true);
         }
     }
 
@@ -104,9 +116,9 @@ public class Player : MovingObject
             GameObject instance = Instantiate(BombPrefab, position, Quaternion.identity);
             instance.transform.SetParent(bombsHolder);
             Bomb bombScript = instance.gameObject.GetComponent<Bomb>();
-            bombScript.DamageDistance = BombDamageDistance;
-            
-            bombs.Add(bombScript);            
+            bombScript.DamageDistance = BombDamageDistance;            
+            bombs.Add(bombScript);
+            animator.SetTrigger("BombSet");
         }
     }
 
@@ -135,7 +147,7 @@ public class Player : MovingObject
             case PowerUp.PowerUpType.Speed:
                 PlayerSpeed = 4;
                 UIScript.ChangeText(0, PlayerSpeed.ToString());
-                trail.SetActive(true);
+              //  trail.SetActive(true);
                 break;
             case PowerUp.PowerUpType.BombDistance:
                 BombDamageDistance += 1;
@@ -151,10 +163,12 @@ public class Player : MovingObject
                 throw new ArgumentOutOfRangeException(nameof(poweUpType), poweUpType, null);
         }
         
-    }
-
-    
+    }    
    
+    public void PlayerDeath()
+    {
+        animator.SetTrigger("PlayerDeath");
+    }
   
 }
    

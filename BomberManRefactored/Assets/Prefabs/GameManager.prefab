@@ -62,7 +62,7 @@ MonoBehaviour:
     type: 3}
   CollapsingWallsPrefab: {fileID: 414685553552854683, guid: c3359899c5bc19c41882fc1c440389f7,
     type: 3}
-  PlayerPrefab: {fileID: 5368023646652123161, guid: 0f689a6a64a8fc042b152ba0576f0e77,
+  PlayerPrefab: {fileID: 6175207197172834516, guid: b14c11e59511fc9498e60e709c463f6f,
     type: 3}
   EnemyPrefab: {fileID: 3467064154768905892, guid: 1dc5fb39bd3de4945914059299b02b15,
     type: 3}

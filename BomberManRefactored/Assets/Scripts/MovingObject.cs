@@ -41,14 +41,10 @@ public abstract class MovingObject : MonoBehaviour
         return gameObject.transform.position;
     }
 
-    protected void MoveObject(GameObject movingObject, Vector3 startPosition, Vector3 endPosition,float objectSpeed)
+    protected void MoveObject(GameObject movingObject, Vector3 startPosition, Vector3 endPosition, float objectSpeed)
     {
-        if (stepFinished)
-        {
-            coroutine = MoveFromTo(movingObject, startPosition, endPosition, objectSpeed);
-            StartCoroutine(coroutine);
-        }
-
+        coroutine = MoveFromTo(movingObject, startPosition, endPosition, objectSpeed);
+        StartCoroutine(coroutine);
     }
 
     protected virtual bool CanMove(Vector3 startPosition, Vector3 endPosition)
@@ -64,8 +60,9 @@ public abstract class MovingObject : MonoBehaviour
         Vector3 startPosition = GetPosition(movingObject);
         Vector3 endPosition = CalculateSideVector(startPosition, movingSide);
         bool canMove = CanMove(startPosition, endPosition);
-        if (canMove)
+        if (canMove && stepFinished)
         {
+            RotateObject(movingObject,movingSide);
             MoveObject(movingObject, startPosition, endPosition, objectSpeed);
         }
 
@@ -96,6 +93,25 @@ public abstract class MovingObject : MonoBehaviour
         return vector;
     }
 
-
+    protected virtual void RotateObject(GameObject obj, Side side)
+    {
+        switch (side)
+        {
+            case Side.Up:
+                obj.transform.rotation = Quaternion.Euler(0, 0, 0);
+                break;
+            case Side.Down:
+                obj.transform.rotation = Quaternion.Euler(0, 180, 0);
+                break;
+            case Side.Left:
+                obj.transform.rotation = Quaternion.Euler(0, -90, 0);
+                break;
+            case Side.Right:
+                obj.transform.rotation = Quaternion.Euler(0, 90, 0);
+                break;
+            default:
+                break;
+        }
+    }
 
 }

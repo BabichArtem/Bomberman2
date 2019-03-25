@@ -23,9 +23,9 @@ public class PowerUp : MonoBehaviour
 
     private void OnTriggerEnter(Collider unit)
     {
-        if (unit.tag == "Player")
+        if (unit.gameObject.tag == "Player")
         {
-            var player = unit.gameObject.GetComponent<Player>();
+            var player = unit.gameObject.GetComponentInParent<Player>();
             player.ApplyPowerUp(PUType);
             Destroy(this.gameObject);
         }
