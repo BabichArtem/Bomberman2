@@ -50,12 +50,13 @@ public class BoardManager : MonoBehaviour
         LayoutPowerUp(PowerUpPrefabs[3], 1);
 
         LayoutPlayer();
-
+        
         for (int i = 0; i < level; i++)
         {
             LayoutEnemy(false);
         }
         LayoutEnemy(true);
+        
     }
 
 
@@ -145,6 +146,7 @@ public class BoardManager : MonoBehaviour
     void LayoutEnemy(bool isEnemySmart)
     {
         Vector3 position = GetRandomPosition(ref FreeCells);
+        position.y -= 0.4f;
         if (!isEnemySmart)
             Instantiate(EnemyPrefab, position, Quaternion.identity);
         else
@@ -164,9 +166,19 @@ public class BoardManager : MonoBehaviour
     }
 
 
-    public void DestroyCollapsingWall(int x, int z)
+    public void DestroyCollapsingWall(Vector3 wallPos)
     {
-        Field[x, z] = 0;
+        Field[(int)wallPos.x, (int)wallPos.z] = 0;
+        foreach (var powerUp in PowerUpsList)
+        {
+            if (powerUp != null)
+            {
+                if (powerUp.transform.position == wallPos)
+                {
+                    powerUp.gameObject.SetActive(true);
+                }
+            }
+        }
     }
 
 

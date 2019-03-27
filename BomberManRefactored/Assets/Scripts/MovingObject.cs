@@ -38,7 +38,10 @@ public abstract class MovingObject : MonoBehaviour
 
     protected Vector3 GetPosition(GameObject gameObject)
     {
-        return gameObject.transform.position;
+        Vector3 pos = gameObject.transform.position;
+        pos.x = Mathf.Round(pos.x);
+        pos.z = Mathf.Round(pos.z);
+        return pos;
     }
 
     protected void MoveObject(GameObject movingObject, Vector3 startPosition, Vector3 endPosition, float objectSpeed)

@@ -6,14 +6,10 @@ public class SmartEnemy : Enemy
 {
     private BoardManager boardScript;
 
-    private void Start()
+    protected override void Start()
     {
         boardScript = GameObject.Find("GameManager").GetComponent<BoardManager>();
-    }
-
-    private void Update()
-    {
-        MoveEnemy();
+        base.Start();
     }
 
     protected override Side GetMovingSide()

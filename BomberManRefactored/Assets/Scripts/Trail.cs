@@ -6,7 +6,6 @@ using UnityEngine;
 public class Trail : MonoBehaviour
 {
     private Bomb bombScript;
-    private BoxCollider boxCol;
     public float xPos;
     public float zPos;
     private bool Started = false;
@@ -14,11 +13,9 @@ public class Trail : MonoBehaviour
 
     void Start()
     {
-        boxCol = GetComponent<BoxCollider>();
-
         bombScript = gameObject.GetComponentInParent<Bomb>();
-        xPos *= bombScript.DamageDistance;
-        zPos *= bombScript.DamageDistance;
+        xPos *= bombScript.DamageDistance+0.5f;
+        zPos *= bombScript.DamageDistance+0.5f;
     }
 
     void Update()

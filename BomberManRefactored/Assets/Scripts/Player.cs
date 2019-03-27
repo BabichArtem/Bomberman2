@@ -15,7 +15,7 @@ public class Player : MovingObject
     BoardManager boardManager;
     
     private UI UIScript;
-
+    
     [SerializeField] private float bombRate = 0.5f;
     private float PlayerSpeed { get; set; } = 2.0f;
     private int BombCount { get; set; } = 1;
@@ -24,8 +24,7 @@ public class Player : MovingObject
     GameObject trail;
     private float nextBombTime;
     private List<Bomb> bombs;
-
-    private Transform bombsHolder;
+    private bool isActive = true;
 
 
 
@@ -39,7 +38,6 @@ public class Player : MovingObject
         boardManager = GameObject.Find("GameManager").GetComponent<BoardManager>();
         UIScript = GameObject.Find("Canvas").GetComponent<UI>();
         bombs = new List<Bomb>();
-        bombsHolder = new GameObject("Bombs").transform;
         
     }
 
@@ -47,38 +45,41 @@ public class Player : MovingObject
     // Update is called once per frame
     void Update()
     {
-        CheckBombs();
-        if (Input.anyKey)
+        if (isActive)
         {
-            Side direction = Side.Idle;
-            if (Input.GetKey(KeyCode.UpArrow))
-                direction = Side.Up;
-            else if (Input.GetKey(KeyCode.DownArrow))
-                direction = Side.Down;
-            else if (Input.GetKey(KeyCode.LeftArrow))
-                direction = Side.Left;
-            else if (Input.GetKey(KeyCode.RightArrow))
-                direction = Side.Right;
-
-            if (Input.GetKey(KeyCode.Space))
+            CheckBombs();
+            if (Input.anyKey)
             {
-                SpawnBomb();
+                Side direction = Side.Idle;
+                if (Input.GetKey(KeyCode.UpArrow))
+                    direction = Side.Up;
+                else if (Input.GetKey(KeyCode.DownArrow))
+                    direction = Side.Down;
+                else if (Input.GetKey(KeyCode.LeftArrow))
+                    direction = Side.Left;
+                else if (Input.GetKey(KeyCode.RightArrow))
+                    direction = Side.Right;
+
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    SpawnBomb();
+                }
+
+                if (direction != Side.Idle)
+                {
+                    AttempMove(gameObject, direction, PlayerSpeed);
+                }
+
             }
 
-            if (direction != Side.Idle)
+            if (stepFinished)
             {
-                AttempMove(gameObject, direction, PlayerSpeed);
+                animator.SetBool("PlayerAnimationRun", false);
             }
-
-        }
-
-        if(stepFinished)
-        {
-            animator.SetBool("PlayerAnimationRun", false);
-        }
-        else
-        {
-            animator.SetBool("PlayerAnimationRun", true);
+            else
+            {
+                animator.SetBool("PlayerAnimationRun", true);
+            }
         }
     }
 
@@ -109,16 +110,17 @@ public class Player : MovingObject
     {
         if (Time.time>nextBombTime && bombs.Count<BombCount)
         {
+            animator.SetTrigger("BombSet");
             nextBombTime = Time.time + bombRate;
             Vector3 position = GetPosition(gameObject);
             position.x = Mathf.Round(position.x);
             position.z = Mathf.Round(position.z);
+            position.y += 0.3f;
             GameObject instance = Instantiate(BombPrefab, position, Quaternion.identity);
-            instance.transform.SetParent(bombsHolder);
             Bomb bombScript = instance.gameObject.GetComponent<Bomb>();
             bombScript.DamageDistance = BombDamageDistance;            
             bombs.Add(bombScript);
-            animator.SetTrigger("BombSet");
+            
         }
     }
 
@@ -167,8 +169,10 @@ public class Player : MovingObject
    
     public void PlayerDeath()
     {
+        isActive = false;
         animator.SetTrigger("PlayerDeath");
     }
+
   
 }
    

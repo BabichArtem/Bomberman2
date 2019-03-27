@@ -6,19 +6,32 @@ using Random = UnityEngine.Random;
 
 public class Enemy : MovingObject
 {
+    protected Animator animator;
+    protected bool isActive = true;
     private float EnemySpeed = 2.0f;
 
-    void Update()
+
+    protected virtual void Start()
     {
-        MoveEnemy();
+        animator = GetComponent<Animator>();
     }
 
-    void OnTriggerEnter(Collider col)
+    protected virtual void Update()
+    {
+        if (isActive)
+        {
+            MoveEnemy();
+        }
+    }
+
+    public void OnChildTriggerEnter(Collider col)
     {
         if (col.tag == "Player")
         {
+            isActive = false;
+            animator.SetTrigger("Hit");
             col.GetComponentInParent<Player>().PlayerDeath();
-         //   Destroy(col.gameObject);
+            //   Destroy(col.gameObject);
         }
 
     }
@@ -26,7 +39,7 @@ public class Enemy : MovingObject
     public Side RandomSide()
     {
         Array values = Enum.GetValues(typeof(Side));
-        Side randomSide = (Side)values.GetValue(Random.Range(0, values.Length));
+        Side randomSide = (Side) values.GetValue(Random.Range(0, values.Length));
         return randomSide;
     }
 
@@ -39,8 +52,16 @@ public class Enemy : MovingObject
     {
         if (stepFinished)
         {
+            animator.SetBool("Run", true);
             AttempMove(gameObject, GetMovingSide(), EnemySpeed);
         }
+    }
+
+    public virtual void EnemyDeath()
+    {
+        animator.SetTrigger("Death");
+        isActive = false;
+        StartCoroutine(DestroyEnemy(2.0f));
     }
 
     protected Vector3 GetPlayerPosition()
@@ -51,6 +72,12 @@ public class Enemy : MovingObject
     protected Vector3 GetEnemyPosition()
     {
         return this.transform.position;
+    }
+
+    IEnumerator DestroyEnemy(float timeToDestroy)
+    {
+        yield return new WaitForSeconds(timeToDestroy);
+        Destroy(this.gameObject);
     }
 
 }

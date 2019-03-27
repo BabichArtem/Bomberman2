@@ -19,5 +19,9 @@ public class GameManager : MonoBehaviour
         boardScript.SetupScene(1);
     }
 
+    void GameOver()
+    {
+    }
+
 
 }

@@ -23,9 +23,10 @@ public class Bomb : MonoBehaviour
     private void CheckAllCollisions()
     {
         Vector3[] sides = {Vector3.forward, Vector3.back, Vector3.left, Vector3.right};
-        RaycastHit hit;
+        
         for (int i = 0; i < 4; i++)
         {
+            RaycastHit hit;
             if (CheckSideCollision(sides[i], out hit))
             {
                 CheckTagAndDestroy(hit.transform.gameObject);
@@ -36,7 +37,8 @@ public class Bomb : MonoBehaviour
 
     bool CheckSideCollision(Vector3 side, out RaycastHit hit)
     {
-        return Physics.Raycast(transform.position, transform.TransformDirection(side), out hit, DamageDistance);
+        Debug.DrawRay(transform.position, transform.TransformDirection(side * DamageDistance), Color.red, 2.0f);
+        return Physics.Raycast(transform.position, transform.TransformDirection(side * DamageDistance), out hit,DamageDistance);
     }
 
    
@@ -56,19 +58,9 @@ public class Bomb : MonoBehaviour
 
     private void DestroyCollapsingWall(GameObject wall)
     {
+        Vector3 wallPosition = wall.transform.position;
         BoardManager boardManager = GameObject.Find("GameManager").GetComponent<BoardManager>();
-        boardManager.DestroyCollapsingWall((int)wall.transform.position.x, (int)wall.transform.position.z);
-        foreach (var powerUp in boardManager.PowerUpsList)
-        {
-            if (powerUp != null)
-            {
-                if (powerUp.transform.position == wall.transform.position)
-                {
-                    powerUp.gameObject.SetActive(true);
-                }
-            }
-        }
-
+        boardManager.DestroyCollapsingWall(wallPosition);
         Destroy(wall);
     }
 
@@ -79,7 +71,7 @@ public class Bomb : MonoBehaviour
 
     private void DestroyEnemy(GameObject enemy)
     {
-        Destroy(enemy);
+        enemy.GetComponentInParent<Enemy>().EnemyDeath();
     }
 
     private void CheckTagAndDestroy(GameObject obj)
